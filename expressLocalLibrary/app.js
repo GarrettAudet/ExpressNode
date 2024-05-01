@@ -14,6 +14,19 @@ const usersRouterTest = require('./routes/test');
 // Create the App
 const app = express();
 
+/* Net New */
+
+// Set up mongoose connection
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", false);
+const mongoDB = "insert_your_database_url_here";
+
+main().catch((err) => console.log(err));
+async function main() {
+  await mongoose.connect(mongoDB);
+}
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');

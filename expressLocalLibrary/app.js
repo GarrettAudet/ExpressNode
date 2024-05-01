@@ -9,7 +9,7 @@ const logger = require('morgan');
 // Require Modules
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-
+const usersRouterTest = require('./routes/test');
 
 // Create the App
 const app = express();
@@ -30,6 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Route-Handling Code for the Request Handling Chain
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/users/test', usersRouterTest);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,6 +1,10 @@
 #! /usr/bin/env node
 
 console.log(
+  'This script populates some test books, authors, genres and bookinstances to your database. Specified database as argument - e.g.: node populatedb "mongodb+srv://cooluser:coolpassword@cluster0.lz91hw2.mongodb.net/local_library?retryWrites=true&w=majority"'
+);
+
+console.log(
     'This script populates some test books, authors, genres and bookinstances to your database. Specified database as argument - e.g.: node populatedb "mongodb+srv://cooluser:coolpassword@cluster0.lz91hw2.mongodb.net/local_library?retryWrites=true&w=majority"'
   );
   
@@ -20,13 +24,23 @@ console.log(
   const mongoose = require("mongoose");
   mongoose.set("strictQuery", false);
   
-  const mongoDB = userArgs[0];
-  
+  /* const mongoDB = userArgs[0]; */
+  const mongoDB = "mongodb+srv://garrettaudet:13JhYrA51jla5mWd@cluster0.bvmeolw.mongodb.net/library_server?retryWrites=true&w=majority&appName=Cluster0&tls=true";
+
   main().catch((err) => console.log(err));
   
   async function main() {
     console.log("Debug: About to connect");
+    console.log(mongoDB);
     await mongoose.connect(mongoDB);
+    /* await mongoose.connect(mongoDB, {
+      server: {
+        socketOptions : {
+          socketTimeoutMS: 0,
+          connectionTimeout: 0
+        }
+      }
+    }); */
     console.log("Debug: Should be connected?");
     await createGenres();
     await createAuthors();

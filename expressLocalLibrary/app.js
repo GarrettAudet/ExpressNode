@@ -19,13 +19,12 @@ const app = express();
 // Set up mongoose connection
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
-const mongoDB = "insert_your_database_url_here";
+const mongoDB = "mongodb+srv://garrettaudet:<13JhYrA51jla5mWd>@cluster0.bvmeolw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 main().catch((err) => console.log(err));
 async function main() {
   await mongoose.connect(mongoDB);
 }
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

@@ -24,7 +24,6 @@ console.log(
   const mongoose = require("mongoose");
   mongoose.set("strictQuery", false);
   
-  /* const mongoDB = userArgs[0]; */
   const mongoDB = "mongodb+srv://garrettaudet:13JhYrA51jla5mWd@cluster0.bvmeolw.mongodb.net/library_server?retryWrites=true&w=majority&appName=Cluster0&tls=true";
 
   main().catch((err) => console.log(err));

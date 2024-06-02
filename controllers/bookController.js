@@ -14,11 +14,11 @@ exports.index = asyncHandler(async (req, res, next) => {
     numAuthors,
     numGenres,
   ] = await Promise.all([
-    Book.countDocuments({}).exec(),
-    BookInstance.countDocuments({}).exec(),
-    BookInstance.countDocuments({ status: "Available" }).exec(),
-    Author.countDocuments({}).exec(),
-    Genre.countDocuments({}).exec(),
+    Book.countDocuments({}).maxTimeMS(20000).exec(),
+    BookInstance.countDocuments({}).maxTimeMS(20000).exec(),
+    BookInstance.countDocuments({ status: "Available" }).maxTimeMS(20000).exec(),
+    Author.countDocuments({}).maxTimeMS(20000).exec(),
+    Genre.countDocuments({}).maxTimeMS(20000).exec(),
   ]);
 
   res.render("index", {
@@ -33,8 +33,14 @@ exports.index = asyncHandler(async (req, res, next) => {
 
 // Display list of all books.
 exports.book_list = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Book list");
+  const allBooks = await Book.find({}, "title author")
+    .sort({ title: 1 })
+    .populate("author")
+    .exec();
+
+  res.render("book_list", { title: "Book List", book_list: allBooks });
 });
+
 
 // Display detail page for a specific book.
 exports.book_detail = asyncHandler(async (req, res, next) => {

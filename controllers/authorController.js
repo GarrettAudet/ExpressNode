@@ -67,7 +67,7 @@ exports.author_create_post = [
     .withMessage("Invalid date of death")
     .toDate()
     .custom((value, { req }) => {
-      if (value && req.body.date_of_birth && new Date(value) <= new Date(req.body.date_of_birth)) {
+      if (value && req.body.date_of_birth && new Date(value) < new Date(req.body.date_of_birth)) {
         throw new Error("Date of death must be after date of birth.");
       }
       return true;

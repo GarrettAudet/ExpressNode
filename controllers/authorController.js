@@ -64,7 +64,14 @@ exports.author_create_post = [
   body("date_of_death", "Invalid date of death")
     .optional({ values: "falsy" })
     .isISO8601()
-    .toDate(),
+    .withMessage("Invalid date of death")
+    .toDate()
+    .custom((value, { req }) => {
+      if (value && req.body.date_of_birth && new Date(value) <= new Date(req.body.date_of_birth)) {
+        throw new Error("Date of death must be after date of birth.");
+      }
+      return true;
+    }),
 
   // Process request after validation and sanitization.
   asyncHandler(async (req, res, next) => {

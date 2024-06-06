@@ -4,7 +4,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-
+const compression = require("compression"); // Import compression module
 
 // Require Modules
 const indexRouter = require('./routes/index');
@@ -19,8 +19,7 @@ const app = express();
 // Set up mongoose connection
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
-const mongoDB = "mongodb+srv://garrettaudet:13JhYrA51jla5mWd@cluster0.bvmeolw.mongodb.net/library_server?retryWrites=true&w=majority&appName=Cluster0";
-
+const mongoDB = process.env.MONGODB_URI || "your_mongodb_connection_string";
 main().catch((err) => console.log(err));
 async function main() {
   await mongoose.connect(mongoDB, {
@@ -34,19 +33,18 @@ async function main() {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-
 // Add the Middleware Libraries
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(express.static(path.join(__dirname, 'public'))); // Serve static files
+app.use(compression()); // Compress all routes
 
 // Route-Handling Code for the Request Handling Chain
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/catalog', catalogRouter);
+app.use('/catalog', catalogRouter); 
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

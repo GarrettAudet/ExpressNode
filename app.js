@@ -4,7 +4,8 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const compression = require("compression"); // Import compression module
+const compression = require("compression"); 
+const helmet = require("helmet"); // Require helmet module
 
 // Require Modules
 const indexRouter = require('./routes/index');
@@ -13,8 +14,6 @@ const catalogRouter = require('./routes/catalog');
 
 // Create the App
 const app = express();
-
-/* Net New */
 
 // Set up mongoose connection
 const mongoose = require("mongoose");
@@ -40,6 +39,22 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public'))); // Serve static files
 app.use(compression()); // Compress all routes
+
+// Set Content Security Policy with Helmet
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "https://code.jquery.com", "https://cdn.jsdelivr.net"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
+      imgSrc: ["'self'", "data:", "https:"],
+      connectSrc: ["'self'"],
+      fontSrc: ["'self'", "https:", "data:"],
+      objectSrc: ["'none'"],
+      upgradeInsecureRequests: [],
+    },
+  })
+);
 
 // Route-Handling Code for the Request Handling Chain
 app.use('/', indexRouter);

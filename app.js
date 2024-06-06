@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const compression = require("compression"); 
 const helmet = require("helmet"); // Require helmet module
+const RateLimit = require("express-rate-limit");
 
 // Require Modules
 const indexRouter = require('./routes/index');
@@ -55,6 +56,15 @@ app.use(
     },
   })
 );
+
+// Set up rate limiter: maximum of twenty requests per minute
+const limiter = RateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 20,
+});
+
+// Apply rate limiter to all requests
+app.use(limiter);
 
 // Route-Handling Code for the Request Handling Chain
 app.use('/', indexRouter);

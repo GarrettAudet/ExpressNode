@@ -101,12 +101,12 @@ exports.bookinstance_delete_get = asyncHandler(async (req, res, next) => {
   if (bookinstance === null) {
     // No results.
     res.redirect("/catalog/bookinstances");
-  }
-
-  res.render("instance_delete", {
+  } else {
+    res.render("bookinstance_delete", {
     title: "Delete Book Instance",
-    author: author,
+    bookinstance: bookinstance,
   });
+  }
 });
 
 // Handle BookInstance delete on POST.
